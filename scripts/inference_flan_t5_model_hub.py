@@ -25,11 +25,12 @@ def predict_fn(data, model_and_tokenizer):
     input_ids = input_ids.to(device)
 
 
-    # pass inputs with all kwargs in data
-    if parameters is not None:
-        outputs = model.generate(input_ids, **parameters)
-    else:
-        outputs = model.generate(input_ids)
+    with torch.no_grad():
+        # pass inputs with all kwargs in data
+        if parameters is not None:
+            outputs = model.generate(input_ids, **parameters)
+        else:
+            outputs = model.generate(input_ids)
 
     # postprocess the prediction
     prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
